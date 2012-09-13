@@ -19,7 +19,11 @@
             var base, interval, xPos;
             this.pixelsPerBase = this.drawingWidth / length;
 
-            interval = length / 20;
+            if (length < 100){
+                interval = 10
+            }else{
+            	interval = length/20;
+            }
             interval = Math.round(interval / 10) * 10
             if (interval == 0) {
                 interval = 5;
