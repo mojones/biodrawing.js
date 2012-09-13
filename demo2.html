@@ -1,0 +1,50 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="biodrawing.js"></script>
+	<script type="text/javascript" src="raphael-min.js"></script>
+	<script type="text/javascript" src="g.raphael-min.js"></script>
+	<script type="text/javascript" src="g.line-min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+</head>
+<body>
+	<h1>Biodrawing demo 2</h1>
+	<div id="drawing">
+	</div>
+	<script type="text/javascript">
+		var drawing = new BioDrawing();
+		drawing.start(500, 'drawing');
+
+		// stuff is always added in a stack from top to bottom
+		// here are the things we can add
+
+		// a space - we give the height in pixels
+		drawing.drawSpacer(50);
+
+		// a title - this is just centered text
+		drawing.drawTitle('hello world');
+		// we can also have a title in colour
+		drawing.drawColouredTitle('hello codemonkeys', 'purple');
+
+
+		// a scale bar - we give the length
+		drawing.drawScale(100);
+		drawing.drawScale(300);
+		drawing.drawScale(800);
+
+		// a chart - we give an array of values and a height
+		drawing.drawChart([5,6,7,8,3,4,5,6,4,5,2,7,5,8,6,7,5], 100);
+		drawing.drawChart([40,46,9,12,38,55,43,83,94,98,71,9,19,33,26,88,24,30,69,40,43,16,11,90,47,8,90,61,74,85,40,6,48,19,59,76,88,94,10,4,80,30,71,95,8,14,74,80,81,35,90,82,74,40,60,10,8,81,79,16,20,80,99,82,3,37,70,58,36,84,54,24,73,95,50,25,94,91,97,70,43,38,43,30,46,56,97,97,47,96,59,6,54,5,26,9,34,24,1,44], 200);
+
+		// a bar - we give the start, stop, height, colour, tooltip, text and an id 
+        drawing.drawBar(100, 600, 20, 'green', 'world', 'hello', 'abc123');
+        drawing.drawBar(50, 400, 40, 'red', 'bar', 'foo', 'abc123');
+        // we give the start/stop in terms of the last scale bar
+
+        // we do not need to manually add space between elements, it happens automatically
+
+		drawing.end();
+	</script>
+</body>
+</html>

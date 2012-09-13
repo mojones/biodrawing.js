@@ -1,0 +1,28 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="biodrawing.js"></script>
+	<script type="text/javascript" src="raphael-min.js"></script>
+	<script type="text/javascript" src="g.raphael-min.js"></script>
+	<script type="text/javascript" src="g.line-min.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	
+</head>
+<body>
+	<h1>Biodrawing demo 1</h1>
+	<div id="drawing">
+	</div>
+	<script type="text/javascript">
+	// create a new biodrawing object
+	var drawing = new BioDrawing();
+	// call start and give the width and the id of the div where it should be drawn
+	drawing.start(500, 'drawing');
+	// start with some white space
+	drawing.drawSpacer(50);
+	// draw a title
+	drawing.drawTitle('biodrawing.js demo');
+	// call end() to actually render the drawing
+	drawing.end();
+	</script>
+</body>
+</html>

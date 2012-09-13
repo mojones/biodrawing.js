@@ -1,0 +1,109 @@
+<html>
+
+<head>
+	<script type="text/javascript" src="biodrawing.js"></script>
+	<script type="text/javascript" src="raphael-min.js"></script>
+	<script type="text/javascript" src="g.raphael-min.js"></script>
+	<script type="text/javascript" src="g.line-min.js"></script>
+	<script type="text/javascript" src="jquery.js"></script>
+
+
+	<script type="text/javascript">
+
+	function calculateGC(bases){
+		var gc = bases.match(/g|c/ig) ? bases.match(/g|c/ig).length : 0;  
+		return (gc * 100/ bases.length);
+
+	}
+
+	function calculateGCSkew(bases){
+		var g = bases.match(/g/ig) ? bases.match(/g/ig).length : 0;  
+		var c = bases.match(/c/ig) ? bases.match(/c/ig).length : 0;  
+		return ((c - g)/ (c + g));
+
+	}
+
+	function makeDrawing(){
+			var windowSize = parseInt($('#windowLength').val())
+			var highGCThreshold = parseInt($('#threshold').val());
+
+			// get contents of the textarea
+			var dna = $('#dna').val();
+
+			var gcContent = [];
+			var gcSkew = []
+
+			var highGCRegions = [];
+			var inHighGC = false;
+			var highGCStart = 0
+
+			// calculate GC content using sliding window
+			for (var i = 0; i <= dna.length; i++) {
+				var start = Math.max(0, i - windowSize);
+				var stop = Math.min(dna.length, i + windowSize);
+				var gc = calculateGC(dna.substring(start, stop));
+				gcContent.push(gc);
+				gcSkew.push(calculateGCSkew(dna.substring(start, stop)));
+
+				if (gc > highGCThreshold && !inHighGC){
+					inHighGC = true;
+					highGCStart = i;
+				}
+
+				if (gc < highGCThreshold && inHighGC){
+					inHighGC = false;
+					highGCRegions.push({'start' : highGCStart, 'end' : i});
+				}
+			}
+
+			console.log(highGCRegions);
+
+			$('#drawing').empty();
+			var drawing = new BioDrawing();
+			drawing.start(1000, 'drawing');
+			drawing.drawSpacer(50);
+
+			drawing.drawScale(dna.length);
+
+			drawing.drawTitle('GC content');
+			drawing.drawChart(gcContent, 200);
+
+
+			for (var i = 0; i < highGCRegions.length ; i++){
+				var region = highGCRegions[i];
+				var myBar = drawing.drawBar(region.start, region.end, 12, 'green', 'foo', region.start + ' to ' + region.end, '123');
+				myBar.click(function(){alert('region from ' + region.start + ' to ' + region.end)});
+			}
+
+			drawing.drawTitle('GC skew');
+			drawing.drawChart(gcSkew, 200);
+
+			drawing.end();
+			
+		}
+
+		</script>
+
+	</head>
+	<body>
+		<h1>Biodrawing demo 3</h1>
+		<textarea id="dna" rows="10" cols="60"></textarea><br/>
+		threshold: <input type="text" id="threshold" value="20"><br/>
+		window size:
+		<select id="windowLength">
+			<option>2</option>
+			<option>4</option>
+			<option>8</option>
+			<option>20</option>
+			<option>40</option>
+			<option>80</option>
+			<option selected="true">200</option>
+			<option>400</option>
+			<option>800</option>
+		</select>
+		<a href="#" onclick="makeDrawing();">draw</a>
+		<div id="drawing">
+		</div>
+		<a href="#" onclick="$('rect').css({'fill' : 'red'});">turn them red</a>
+	</body>
+	</html>
